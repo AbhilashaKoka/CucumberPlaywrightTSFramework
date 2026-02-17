@@ -1,11 +1,22 @@
 import { test, expect} from '@playwright/test';
-import BookingAPIRequestBody from '../test-data/api-requests/booking_request_body.json';
-test('Create Post api request using static json file', async({request})=>{
+
+test('Create Post api request using static request body', async({request})=>{
   
   //Create POST API Request 
   const postAPIResponse=await request.post('/booking',{
-   data:BookingAPIRequestBody
+   data:{
+    "firstname": "sita",
+    "lastname": "kumari api testing",
+    "totalprice": 1000,
+    "depositpaid": true,
+    "bookingdates": {
+    "checkin": "2018-01-01",
+    "checkout": "2019-01-01"
+    },
+    "additionalneeds": "super bowls"
+        }
     })
+    
 
      //Validate status code 
        expect(postAPIResponse.ok()).toBeTruthy();
