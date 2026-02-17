@@ -1,6 +1,8 @@
 import { defineConfig, devices } from '@playwright/test';
-import dotenv from 'dotenv';
+
 import path from 'path';
+import dotenv from 'dotenv';
+dotenv.config();
 
 // Read from ".env" file.
 dotenv.config({ path: path.resolve(__dirname, '.env') });
@@ -20,7 +22,7 @@ export default defineConfig({
   expect: {
     timeout: 2 * 60 * 1000
   },
-   testDir: './tests',
+   testDir: './e2e',
   testMatch: ['**/*.spec.ts'],
   /* Run tests in files in parallel */
   fullyParallel: true,
