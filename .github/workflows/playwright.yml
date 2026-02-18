@@ -1,4 +1,4 @@
-name: Playwright Tests
+name:name: Playwright Tests
 
 on:
   push:
@@ -26,23 +26,17 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-      # If your project uses a lockfile (package-lock.json), keep npm ci; otherwise use npm i
+        # If your project uses a lockfile (package-lock.json), keep npm ci; otherwise use npm i
         run: npm ci
 
       - name: Install Playwright browsers & OS dependencies
         run: npx playwright install --with-deps
 
-      # Optional: If your tests need a display (most UI tests do)
-      # Playwright usually handles headless mode, but xvfb is handy for some native dialogs
       - name: Run Playwright tests
         env:
           CI: true
         run: |
-          # Collect traces, videos, screenshots for debugging
-          npx playwright test --reporter=line
-        # If you prefer HTML report generation AFTER the run:
-        # run: |
-        #   npx playwright test --reporter=html,line
+          xvfb-run --auto-servernum -- npx playwright test --reporter=html,line
 
       # Upload the HTML report even if tests fail/cancel
       - name: Upload Playwright HTML report
@@ -54,7 +48,7 @@ jobs:
           retention-days: 30
           if-no-files-found: warn
 
-      # Upload test artifacts (videos, screenshots, traces) if you store them under test-results
+      # Upload test artifacts (videos/screenshots/traces) if you store them under test-results
       - name: Upload Playwright test results (videos/screenshots/traces)
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
