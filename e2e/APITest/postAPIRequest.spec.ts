@@ -6,7 +6,7 @@ test('Create Post api request using static request body', async({request})=>{
   const postAPIResponse=await request.post('/booking',{
    data:{
     "firstname": "sita",
-    "lastname": "kumari api testing",
+    "lastname": "kumari",
     "totalprice": 1000,
     "depositpaid": true,
     "bookingdates": {
