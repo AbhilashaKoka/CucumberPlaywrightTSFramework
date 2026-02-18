@@ -11,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
 
-    # Ensures PRs from forks can still run (no special perms needed for artifacts)
     permissions:
       contents: read
 
@@ -26,19 +25,35 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        # If your project uses a lockfile (package-lock.json), keep npm ci; otherwise use npm i
         run: npm ci
 
       - name: Install Playwright browsers & OS dependencies
         run: npx playwright install --with-deps
 
-      - name: Run Playwright tests
+      - name: Run Playwright tests (Allure + HTML reporters)
         env:
           CI: true
         run: |
-          xvfb-run --auto-servernum -- npx playwright test --reporter=html,line
+          # Use Allure + HTML + line reporters
+          xvfb-run --auto-servernum -- npx playwright test --reporter=line,allure-playwright,html
 
-      # Upload the HTML report even if tests fail/cancel
+      - name: Generate Allure report
+        # Requires "allure-commandline" as a devDependency
+        run: |
+          npx allure generate --clean ./allure-results --output ./allure-report
+        # If you want to include retries/flaky history across runs, see Option B for history handling.
+
+      # Upload Allure report as artifact
+      - name: Upload Allure report
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: allure-report/
+          retention-days: 14
+          if-no-files-found: warn
+
+      # Upload the Playwright HTML report even if tests fail/cancel
       - name: Upload Playwright HTML report
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
