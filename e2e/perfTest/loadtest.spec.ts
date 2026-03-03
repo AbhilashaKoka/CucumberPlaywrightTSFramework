@@ -1,53 +1,73 @@
-
 // tests/load.spec.ts
 import { test, expect, chromium } from '@playwright/test';
+import { LoginPage } from '../../pages/loginpage';
 
-test('hundred concurrent users load test', async () => {
-  const concurrentUsers = 10;
+test('concurrent login load test', async () => {
+  const concurrentUsers = Number(process.env.CONCURRENCY || 10);
+  const rampUpMs = Number(process.env.RAMP_UP_MS || 0); // e.g., 200 means 200ms stagger
+  const username = process.env.LOGIN_USER || 'Admin';
+  const password = process.env.LOGIN_PASS || 'admin123';
 
-  // Launch a single shared browser; create separate contexts for isolation (cheaper than 100 browsers).
-  const browser = await chromium.launch({ headless: false });
+  const browser = await chromium.launch({ headless: true });
+
+  const results: { i: number; ok: boolean; ms: number; err?: string }[] = [];
+  const startAll = Date.now();
 
   try {
-    // Build 100 concurrent "user" tasks
     const tasks = Array.from({ length: concurrentUsers }, (_, i) => (async () => {
+      const started = Date.now();
       const context = await browser.newContext({
-        // Optional: emulate different user agents / locales if needed
         // userAgent: `load-test-agent-${i}`,
+        // locale: i % 2 === 0 ? 'en-US' : 'en-GB',
       });
       const page = await context.newPage();
 
-      // Be defensive with timeouts so slow responses don't stall the entire batch.
-      page.setDefaultTimeout(15_000);
-      page.setDefaultNavigationTimeout(20_000);
+      // Optional staggered start
+      if (rampUpMs > 0) await new Promise(r => setTimeout(r, i * rampUpMs));
 
       try {
-        await page.goto('https://www.google.com/', { waitUntil: 'domcontentloaded' });
+        const loginPage = new LoginPage(page);
+        await loginPage.goto();
+        await loginPage.loginToHomePage(username, password);
 
-        // Handle potential consent/region screens gracefully (no-op if not present)
-        const agreeBtn = page.locator('button:has-text("I agree"), button:has-text("Accept all")');
-        if (await agreeBtn.first().isVisible().catch(() => false)) {
-          await agreeBtn.first().click({ trial: false }).catch(() => undefined);
-        }
+        // Assert some post-login signal
+        await expect(page).toHaveURL(/dashboard|home/i, { timeout: 15_000 });
+        await expect(page.locator('text=Welcome')).toBeVisible({ timeout: 10_000 });
 
-        // Use a stable selector for the search box instead of the volatile #APjFqb
-        const search = page.locator('input[name="q"]');
-        await search.fill('playwright load testing');
-        await search.press('Enter');
-
-        // Wait briefly to simulate dwell time and let results load
-        await page.waitForLoadState('domcontentloaded');
-        await page.waitForTimeout(500);
-
-        // (Optional) Light assertion to ensure results page rendered
-        await expect(page).toHaveTitle(/playwright/i, { timeout: 10_000 });
+        results.push({ i, ok: true, ms: Date.now() - started });
+      } catch (e: any) {
+        results.push({ i, ok: false, ms: Date.now() - started, err: e?.message || String(e) });
+        throw e;
       } finally {
         await context.close();
       }
     })());
 
-    // Run all users concurrently
-    await Promise.all(tasks);
+    // Prevent one rejection from aborting the rest
+    const settled = await Promise.allSettled(tasks);
+
+    const totalMs = Date.now() - startAll;
+    const successes = results.filter(r => r.ok).length;
+    const failures = results.length - successes;
+    const durations = results.map(r => r.ms).sort((a, b) => a - b);
+    const p = (q: number) => durations[Math.min(durations.length - 1, Math.floor(q * durations.length))];
+
+    // Emit some basic load metrics into test output
+    console.log(`\n--- Load Summary ---`);
+    console.log(`Users: ${concurrentUsers}, Ramp-up: ${rampUpMs}ms, Total wall time: ${totalMs} ms`);
+    console.log(`Success: ${successes}, Failures: ${failures}`);
+    if (durations.length) {
+      console.log(`p50: ${p(0.5)} ms, p90: ${p(0.9)} ms, max: ${durations[durations.length - 1]} ms`);
+    }
+    const failed = results.filter(r => !r.ok);
+    if (failed.length) {
+      console.log(`Failures:`);
+      failed.slice(0, 5).forEach(f => console.log(`#${f.i} -> ${f.err}`));
+    }
+
+    // Make the test fail if any failed
+    const anyRejected = settled.some(s => s.status === 'rejected');
+    expect(anyRejected, `Some user iterations failed: ${failed.length}`).toBeFalsy();
   } finally {
     await browser.close();
   }
