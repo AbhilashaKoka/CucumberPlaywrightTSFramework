@@ -1,0 +1,222 @@
+ ==================================================================== 
+
+What is Playwright? 
+===============================================================================
+Playwright is an open‑source automation testing tool which is used for end-to-end modern web mobile applications in headed or headless mode.
+Playwright is mainly used for: 
+End‑to‑end (E2E) testing 
+UI automation 
+Web scraping
+Browser testing across devices and browsers 
+Advantages: 
+Cross‑browser support:Chromium (Chrome, Edge), Firefox, WebKit (Safari) 
+Cross Platform Testing: Windows, Linux and MacOS 
+ Multiple language support:JavaScript / TypeScript, Python, Java, C# 
+Built‑in auto‑wait (no need for manual sleeps) 
+Mobile/Web Devices-Mobile Emulator of Google Chrome for Android and Mobile Safari 
+Tracing 
+Reporting 
+Dynamic wait and Assertion 
+Faster and Reliable 
+Powerful Tool-Code Gen, Playwright Inspector and Trace Viewer 
+No Flaky Test 
+Disadvantages /Limitations: 
+Playwright does not have a big community compared to Selenium WebDriver 
+It does not work on legacy browser such IE11 
+It is not possible to test with real device mobile apps 
+==========================================================================================
+Playwright Architecture: 
+===========================================================================================
+Client: In the client side our automation script is written in the different languages such as JavaScript, python, C#, .NET etc. 
+Server: The server communicates between client and web browser engines such as chrome, Firefox, edge, etc. Playwright uses CDP to communicate with Chromium or chrome browser, similarly playwright has implemented CDP to communicate with other browser such as Firefox web kit etc. 
+WebSocket Protocol: WebSocket connection is established to the server from client by using process called Web Socket handshake, WebSocket sends response as soon as it gets request in real time. Connection will not be terminated until unless connection is closed by either client or server. 
+CDP (chrome Dev Tools Protocol): 
+Client and Server Communication: When test is triggered client converts automation test into JSON format and sends to server over WebSocket Protocol 
+Playwright communicated all the request over single WebSocket protocol connection 
+Test Failure and Flaky test flakiness is less as because executing all tests over single WebSocket connection. 
+Playwright Vs Cypress: 
+Playwright Vs Selenium: 
+===========================================================================================
+Software Requirement: 
+===============================================================================================
+Node JS 
+Visual Studio Code (VS Code) 
+JavaScript 
+Operating System-Window/MAC/LINUX 
+Installing NodeJS Link: Node.js — Download Node.js®  
+Installing Visual Studio Code Link: Download Visual Studio Code - Mac, Linux, Windows 
+==============================================================================================
+Installing Playwright in VS code : 
+=============================================================================================
+Step 1: create new empty folder 
+Step2: Navigate to that folder in VS code 
+Step3: Navigate to Extension Ctrl+shift+X and Type “Playwright Test for VS Code” 
+Step4: CTRL+Shift+P, enter “Install Playwright” 
+Step 5: Select Playwright configuration and click on “OK” 
+Step 6: Install Playwright & Select Configurations 
+npm init playwright@latest 
+Playwright will download the browsers needed as well as create the following files.
+node_modules- contains all .js files 
+Playwright.config.js-contains configuration for running test 
+Package.json- contains dependencies 
+package-lock.json 
+tests/ example.spec.js 
+tests-examples/ demo-todo-app.spec.js 
+step7:Run Test-run test option on left side of test in file example.spec.js  
+Test Explorer:  Click on test explorer icon 
+Run Test on Google Chrome and Microsoft Edge Browsers:  
+step8:Recording Test in Visual Studio Code: 
+step9:Generate HTML Test Report: 
+===========================================================================================
+Commonly used Terminologies in playwright Test: 
+==============================================================================================
+Require? 
+To include a playwright module or to use a playwright module in the current JavaScript file. 
+Async & await? 
+Async is a function; await is valid inside async function only. 
+Zero or more await expressions can be written inside the sync function. 
+When each time async functions are called, it returns a new promise value. Which will be resolved with the value returned by the async function or rejected with an exception. 
+Page? 
+It is a browser context object, using context we can open URL & interact with browser. 
+Expect? 
+It is a library for JavaScript &typescript intended for use with test runners such as Jest or playwright Test. 
+It lets you write better assertions for end-to-end testing or component testing 
+===============================================================================================
+First Playwright Automation Test: 
+=================================================================================================
+//include playwright module 
+//write the test 
+//go to URL 
+//scripts 
+//validate 
+==================================================================================================
+Pick locator in Playwright: 
+=============================================================================================
+Install playwright using command prompt: 
+==============================================================================================
+Step 1: Enter ‘npm init playwright@latest’ 
+Step 2: Select Playwright configurations. 
+Run Test in Headless mode : 
+Step 1: Enter ‘npx playwright test –headless' 
+Run test in UI mode from CMD: 
+Step 1: Enter ‘npx playwright test –headed' 
+Run  Specific Playwright Spec File: 
+Step 1: Enter ‘npx playwright test –-headed demo.spec.js' 
+Run test on different  Browser: 
+Step 1: Enter ‘npx playwright test –project=chromiun' 
+Record Test Using CodeGen: 
+Step 1: Enter ‘npx playwright codegen' 
+Step2:Open Playwright inspector tool window 
+Step3:Open a Browser with  
+==================================================================================================
+Locator, Assertion, Hooks, Annotations & Actions: 
+=================================================================================================
+Locator- Identify Web Element 
+1.By Role 
+Example: await page.getByRole(‘link’, {name: 'value’}). click (); 
+2. By Label 
+Example: Await page.getByLabel(value, {exact: true}). fill(‘value’); 
+3.By Alt Text 
+Example: await page.getByAlttext(‘text’). click (); 
+4.By Test Id 
+Example: Await page.getByTestId(‘value’). fill (‘tester talk’); 
+5.By Text 
+Example: await page.getByRole(‘link’, {name: 'value’}). click (); 
+6.By Title 
+Example: Await page.getByTitle(‘cypress by testers talk’). click (); 
+7.Xpath 
+Example:await page.locator(“xpath=//*[@attr=’value’]”).click(); 
+8.CSS Selector 
+Example: await page.locator(“css=/*[@attr=’value’]”). click (); 
+9.By Placeholder 
+await page.ByPlaceholder(’value’). click ();  
+==================================================================================================
+Screenshots: 
+==================================================================================================
+1.Element Screenshot 
+2.Page Screenshot 
+3.Full Page Screenshot 
+Add Screenshots to HTML Report when Test Failed: 
+==================================================================================================
+Hooks: 
+=================================================================================================
+Block of code executing before your tests, or after executing the tests 
+1)BeforeEach() 
+2)BeforeAll() 
+3)AfterEach() 
+4)AfterAll() 
+==============================================================================================
+ Dropdown List, Frames & Date Picker: 
+==================================================================================================
+Dropdown List:
+1)Value 
+2)Visible Text 
+==================================================================================================Mouse Clicks, Keyboards Actions, Drag and Drop: 
+==================================================================================================
+ Assertions-Hard and Soft Assertions: 
+ ==============================================================================================
+1)URL-toHaveURL() 
+2)title-toHaveTitle() 
+3)text-toHavetext() 
+4)Editable-oBeEditable() 
+5)Visible-toBeVisisble() 
+6)Enable-toBeEnabled() 
+7)Disabled-toBeDisabled() 
+8)Empty-toBeEmpty() 
+9)Count-toHaveCount() 
+=================================================================================================
+Watch Mode: 
+Run this cmd:
+npx playwright test - -ui 
+Click on the watch it will display the status whether is run or not. 
+Test Traces, Actions metadata, Console, Log, Network:
+Retry, Repeat, Visual Testing and Parallelism: 
+Annotation:
+skip Test 
+skip the test, run other test in the suite 
+Only: 
+to run only that particular test 
+Grouping Tests: 
+Tag Test: 
+PS C:\Users\I8046\OneDrive - Indium Software India Private Limited\Documents\DemoProject> npx playwright test --grep "@smoke" 
+Repeat: 
+npx playwright test –repeat-each=5 
+this command will run the test 5 times 
+Retry: 
+npx playwright test –retries=2 
+parallelism/Parallel Test Execution: 
+npx playwright test group.spec.ts --workers 3 
+Parametrize Tests: 
+step1:Create a const test Parameters 
+step2:Create a for loop to iterate to each value in test  
+step3:Replace the value with Parameter variable
+===============================================================================================   
+Visual Comparison -Visual Testing: 
+===========================================================================================
+Compare the screen shot anywhere in the script with the visual comparison  
+Page Object model, Video, Environments, Data Driven Testing: 
+Env File: 
+Data Driven Testing : 
+Data Driven Testing Using JSON File:  
+Data Driven Testing Using CSV File: 
+Run Tests on Multiple Environments-QA, STAGE, PROD etc: 
+=============================================================================================
+Implementing Page Object Model in playwright: 
+========================================================================================
+Why POM (Page Object Model)? 
+Page Object Model is a design pattern to create object repository for web page elements 
+For each web Page there is a corresponding page class 
+Page class contains all the web Page elements of that page, and it contains page methods which perform operations on those web elements 
+Advantages: 
+Code will be cleaner and Easier to understand 
+Object repository is independent of test scripts 
+Test Scripts will be optimized because of Elements respective abstraction methods in page classes 
+Disadvantages: 
+Time and Effort
+Specific to Project 
+===================================================================================
+Video Recording Full Screen Browser: 
+=========================================================================
+Playwright doc link: 
+https://devdocs.io/playwright/ 
+https://playwright.dev/docs/intro
