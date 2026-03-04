@@ -1,0 +1,5 @@
+
+--- Load Summary ---
+Users: 10, Ramp-up: 0ms, Total wall time: 39852 ms
+Success: 10, Failures: 0
+p50: 32415 ms, p90: 39458 ms, max: 39458 ms

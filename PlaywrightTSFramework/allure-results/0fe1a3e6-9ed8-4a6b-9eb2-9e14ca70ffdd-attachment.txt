@@ -1,0 +1,14 @@
+Created Booking ID: 4450
+Get Booking Response: [
+  { bookingid: 1878 },
+  { bookingid: 1128 },
+  { bookingid: 1901 },
+  { bookingid: 1155 },
+  { bookingid: 1170 },
+  { bookingid: 611 },
+  { bookingid: 1926 },
+  { bookingid: 603 },
+  { bookingid: 636 },
+  { bookingid: 4450 }
+]
+Get Booking Status: 200

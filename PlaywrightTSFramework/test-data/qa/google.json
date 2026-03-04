@@ -1,0 +1,12 @@
+{
+    "Module1TestData":{
+        "username":"Admin",
+        "password":"admin123"
+        
+    },
+     "QATestData":{
+        "username":"Admin",
+        "password":"admin123"
+        
+    }
+}
