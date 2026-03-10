@@ -1,0 +1,1 @@
+Testing location: new york, Center: undefined

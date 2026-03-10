@@ -1,0 +1,3 @@
+Created Booking ID: 4437
+Get Booking Response: [ { bookingid: 4437 }, { bookingid: 4427 }, { bookingid: 4425 } ]
+Get Booking Status: 200

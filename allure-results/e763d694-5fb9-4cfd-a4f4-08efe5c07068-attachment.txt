@@ -1,0 +1,10 @@
+Created Booking ID: 4426
+Get Booking Response: {
+  firstname: 'sita',
+  lastname: 'Kumari',
+  totalprice: 1000,
+  depositpaid: true,
+  bookingdates: { checkin: '2018-01-01', checkout: '2019-01-01' },
+  additionalneeds: ''
+}
+Get Booking Status: 200

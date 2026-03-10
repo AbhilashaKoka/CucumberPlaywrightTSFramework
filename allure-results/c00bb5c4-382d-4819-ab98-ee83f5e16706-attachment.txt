@@ -1,0 +1,21 @@
+Created Booking ID: 4428
+Get Booking Response: {
+  firstname: 'sita',
+  lastname: 'Kumari',
+  totalprice: 1000,
+  depositpaid: true,
+  bookingdates: { checkin: '2018-01-01', checkout: '2019-01-01' },
+  additionalneeds: ''
+}
+Get Booking Status: 200
+Token Response Status: 200
+Generated Token: 743e9e3a81ff91e
+PATCH API Response Status: 200
+PATCH API Response Body: {
+  firstname: 'Playwright Tester',
+  lastname: 'Kumari',
+  totalprice: 1000,
+  depositpaid: true,
+  bookingdates: { checkin: '2018-01-01', checkout: '2019-01-01' },
+  additionalneeds: ''
+}
